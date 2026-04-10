@@ -192,8 +192,13 @@ else:
 
     st.caption(f"**{total}** result(s) · **{total_pages}** page(s)")
 
-    # Page selector
-    page = st.number_input("Page", min_value=1, max_value=total_pages, value=1, step=1)
+    # Pagination via session state so Prev/Next buttons work reliably
+    if "page" not in st.session_state:
+        st.session_state.page = 1
+    # Clamp to valid range whenever total_pages changes
+    st.session_state.page = max(1, min(st.session_state.page, total_pages))
+
+    page = st.session_state.page
     offset = (page - 1) * page_size
 
     rows = list_mistakes(conn, limit=page_size, offset=offset, **filter_kwargs)
@@ -247,9 +252,9 @@ else:
         nav1, nav2, nav3 = st.columns([1, 1, 4])
         with nav1:
             if st.button("⬅ Prev") and page > 1:
-                st.query_params["page"] = str(page - 1)
+                st.session_state.page = page - 1
                 st.rerun()
         with nav2:
             if st.button("Next ➡") and page < total_pages:
-                st.query_params["page"] = str(page + 1)
+                st.session_state.page = page + 1
                 st.rerun()
