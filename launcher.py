@@ -46,6 +46,7 @@ if __name__ == "__main__":
         "streamlit",
         "run",
         app_path,
+        "--global.developmentMode=false",
         "--server.headless=true",
         "--server.port=8501",
         "--browser.gatherUsageStats=false",
