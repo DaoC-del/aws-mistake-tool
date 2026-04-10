@@ -110,13 +110,22 @@ Your answers: A B
 
 [![Build Windows EXE](https://github.com/DaoC-del/aws-mistake-tool/actions/workflows/build-windows.yml/badge.svg?branch=main)](https://github.com/DaoC-del/aws-mistake-tool/actions/workflows/build-windows.yml)
 
-The EXE is built automatically on every push to `main` (and can also be
-triggered manually via **Actions → Build Windows EXE → Run workflow**).
+### When does the build run?
 
-**To download:**
+The **Build Windows EXE** workflow runs in two situations:
+
+| Trigger | When it happens |
+|---|---|
+| **Push to `main`** | Automatically after every commit or merged PR lands on `main` |
+| **Manual** | Any time you open **Actions → Build Windows EXE → Run workflow** and click the green button |
+
+> **Note:** If you see a "Build Windows EXE" run appear right after merging a PR, that is expected — it is the automatic push-to-main build, not a check. Both triggers produce a downloadable EXE artifact.
+
+### How to download the EXE
+
 1. Go to [Actions → Build Windows EXE](../../actions/workflows/build-windows.yml).
 2. Click the latest successful run (green ✓).
-3. Scroll to the **Artifacts** section at the bottom.
+3. Scroll to the **Artifacts** section at the bottom of the run page.
 4. Click **aws-mistake-tool-windows** to download the ZIP, then unzip to get `aws-mistake-tool.exe`.
 
 Double-click the EXE – it starts Streamlit and opens your browser
