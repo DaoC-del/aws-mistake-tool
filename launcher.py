@@ -29,6 +29,10 @@ def _get_base_path() -> str:
 
 
 if __name__ == "__main__":
+    # Ensure Streamlit does not run in development mode so that server.port
+    # and other options work correctly when launched from a PyInstaller bundle.
+    os.environ.setdefault("STREAMLIT_GLOBAL_DEVELOPMENT_MODE", "false")
+
     base_path = _get_base_path()
     app_path = os.path.join(base_path, "app.py")
 
