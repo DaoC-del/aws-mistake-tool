@@ -108,16 +108,22 @@ Your answers: A B
 
 ## Windows EXE
 
-[![Build Windows EXE](https://github.com/DaoC-del/aws-mistake-tool/actions/workflows/build-windows.yml/badge.svg?branch=main)](https://github.com/DaoC-del/aws-mistake-tool/actions/workflows/build-windows.yml)
+[![Build Windows EXE (manual)](https://github.com/DaoC-del/aws-mistake-tool/actions/workflows/build-windows.yml/badge.svg)](https://github.com/DaoC-del/aws-mistake-tool/actions/workflows/build-windows.yml)
 
-The EXE is built automatically on every push to `main` (and can also be
-triggered manually via **Actions → Build Windows EXE → Run workflow**).
+The EXE is built **on demand** (manual trigger only – it does **not** run
+automatically on PR merges or pushes).
 
-**To download:**
-1. Go to [Actions → Build Windows EXE](../../actions/workflows/build-windows.yml).
-2. Click the latest successful run (green ✓).
-3. Scroll to the **Artifacts** section at the bottom.
-4. Click **aws-mistake-tool-windows** to download the ZIP, then unzip to get `aws-mistake-tool.exe`.
+**How to build and download the EXE:**
+1. Go to [Actions → Build Windows EXE (manual)](https://github.com/DaoC-del/aws-mistake-tool/actions/workflows/build-windows.yml).
+2. Click **Run workflow** (top-right of the workflow list), select the `main` branch, then click the green **Run workflow** button.
+3. Wait for the run to finish (green ✓ appears next to it).
+4. Click on that run to open its details page.
+5. Scroll to the **Artifacts** section at the bottom.
+6. Click **aws-mistake-tool-windows** to download the ZIP, then unzip to get `aws-mistake-tool.exe`.
+
+> **Note:** Only runs triggered via "Run workflow" (workflow_dispatch) will
+> produce the EXE artifact. Runs labelled with a PR-merge or push event belong
+> to other workflows and will not have an EXE to download.
 
 Double-click the EXE – it starts Streamlit and opens your browser
 automatically.  
