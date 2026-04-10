@@ -122,3 +122,49 @@ triggered manually via **Actions → Build Windows EXE → Run workflow**).
 Double-click the EXE – it starts Streamlit and opens your browser
 automatically.  
 The `mistakes.db` file is created in the same folder as the EXE.
+
+---
+
+### Troubleshooting – "server.port does not work when global.developmentMode is true"
+
+<img src="docs/images/error-development-mode.png" alt="Screenshot: RuntimeError server.port does not work when global.developmentMode is true" />
+
+**What the screenshot shows**
+
+A Windows terminal (PowerShell/CMD) displaying a Python traceback that ends
+with two critical lines:
+
+```
+RuntimeError: server.port does not work when global.developmentMode is true.
+[PYI-XXXXX:ERROR] Failed to execute script 'launcher' due to unhandled exception!
+```
+
+**Root cause**
+
+When PyInstaller packages a Python application, the frozen binary cannot place
+Streamlit's own entry-point script on `sys.argv[0]`.  Streamlit's bootstrap
+code interprets this absence as a sign that it is running in a development
+environment and automatically sets `global.developmentMode = True`.
+
+Once `developmentMode` is `True`, Streamlit's configuration validator raises a
+`RuntimeError` if `server.port` is provided – either via `--server.port` on
+the command line or via the `STREAMLIT_SERVER_PORT` env-var *if the validator
+has already locked the config*.  The old `launcher.py` passed `--server.port=8501`
+as a CLI argument, which always triggers this check in frozen bundles.
+
+**How the fix works**
+
+The updated `launcher.py` sets four environment variables **before** Streamlit
+is imported or its config bootstrap runs:
+
+| Variable | Value | Effect |
+|---|---|---|
+| `STREAMLIT_GLOBAL_DEVELOPMENT_MODE` | `false` | Disables development mode; removes the port restriction |
+| `STREAMLIT_SERVER_HEADLESS` | `1` | Suppresses the "running locally" browser prompt |
+| `STREAMLIT_SERVER_PORT` | `8501` | Binds to a fixed port (read before the validator runs) |
+| `STREAMLIT_BROWSER_GATHER_USAGE_STATS` | `false` | Disables telemetry |
+
+Environment variables are read during Streamlit's very first config load, before
+the validator that checks `developmentMode`.  This means the port is set
+correctly and the `RuntimeError` is never reached.  The `--server.port` CLI
+argument (which re-triggers the validator) is no longer passed.
