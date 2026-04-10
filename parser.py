@@ -25,13 +25,15 @@ Options:
 import re
 from typing import Dict, List, Optional
 
-_OPTION_RE = re.compile(r"^\s*([A-F])\s*[\.\)]\s*(.+?)\s*$", re.IGNORECASE)
+# Patterns use simple greedy (.+) with no trailing \s* to avoid ReDoS.
+# The caller strips captured groups.
+_OPTION_RE = re.compile(r"^\s*([A-F])\s*[\.\)]\s+(.+)", re.IGNORECASE)
 _CORRECT_RE = re.compile(
-    r"^\s*Correct\s+answers?\s*[:\-]\s*([A-Fa-f][A-Fa-f,\s]*)\s*$",
+    r"^\s*Correct\s+answers?\s*[:\-]\s*(.+)",
     re.IGNORECASE,
 )
 _YOUR_RE = re.compile(
-    r"^\s*Your\s+answers?\s*[:\-]\s*([A-Fa-f][A-Fa-f,\s]*)\s*$",
+    r"^\s*Your\s+answers?\s*[:\-]\s*(.+)",
     re.IGNORECASE,
 )
 

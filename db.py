@@ -64,7 +64,7 @@ def insert_mistake(conn: sqlite3.Connection, row: Dict[str, Any]) -> int:
     return int(cur.lastrowid)
 
 
-def build_where(
+def _build_where(
     exam: Optional[str] = None,
     domain: Optional[str] = None,
     tag: Optional[str] = None,
@@ -72,6 +72,7 @@ def build_where(
     only_incorrect: bool = False,
     only_correct: bool = False,
 ) -> Tuple[str, List[Any]]:
+    """Internal helper – build a safe WHERE clause using parameterised values."""
     clauses: List[str] = []
     params: List[Any] = []
 
@@ -105,27 +106,40 @@ def build_where(
 
 
 def count_mistakes(
-    conn: sqlite3.Connection, where: str, params: List[Any]
+    conn: sqlite3.Connection,
+    exam: Optional[str] = None,
+    domain: Optional[str] = None,
+    tag: Optional[str] = None,
+    keyword: Optional[str] = None,
+    only_incorrect: bool = False,
+    only_correct: bool = False,
 ) -> int:
-    row = conn.execute(f"SELECT COUNT(*) AS c FROM mistakes {where}", params).fetchone()
+    where, params = _build_where(exam, domain, tag, keyword, only_incorrect, only_correct)
+    row = conn.execute(
+        "SELECT COUNT(*) AS c FROM mistakes " + where, params
+    ).fetchone()
     return int(row["c"])
 
 
 def list_mistakes(
     conn: sqlite3.Connection,
-    where: str,
-    params: List[Any],
     limit: int,
     offset: int,
+    exam: Optional[str] = None,
+    domain: Optional[str] = None,
+    tag: Optional[str] = None,
+    keyword: Optional[str] = None,
+    only_incorrect: bool = False,
+    only_correct: bool = False,
 ) -> List[sqlite3.Row]:
-    sql = f"""
-        SELECT id, created_at, exam, domain, topic, tags, reason,
-               question, correct_letters, your_letters, your_correct
-        FROM   mistakes
-        {where}
-        ORDER BY datetime(created_at) DESC, id DESC
-        LIMIT ? OFFSET ?
-    """
+    where, params = _build_where(exam, domain, tag, keyword, only_incorrect, only_correct)
+    sql = (
+        "SELECT id, created_at, exam, domain, topic, tags, reason, "
+        "question, correct_letters, your_letters, your_correct "
+        "FROM mistakes "
+        + where
+        + " ORDER BY datetime(created_at) DESC, id DESC LIMIT ? OFFSET ?"
+    )
     return conn.execute(sql, params + [limit, offset]).fetchall()
 
 

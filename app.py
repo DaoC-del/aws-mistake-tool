@@ -11,7 +11,6 @@ import math
 import streamlit as st
 
 from db import (
-    build_where,
     count_mistakes,
     distinct_exams,
     get_conn,
@@ -180,7 +179,7 @@ else:
     page_size = st.selectbox("Per page", [5, 10, 20, 50], index=1)
 
     # --- Query & pagination ------------------------------------------------
-    where, params = build_where(
+    filter_kwargs = dict(
         exam=exam_val,
         domain=domain_filter,
         tag=tag_filter.strip() or None,
@@ -188,7 +187,7 @@ else:
         only_incorrect=only_incorrect,
         only_correct=only_correct,
     )
-    total = count_mistakes(conn, where, params)
+    total = count_mistakes(conn, **filter_kwargs)
     total_pages = max(1, math.ceil(total / page_size))
 
     st.caption(f"**{total}** result(s) · **{total_pages}** page(s)")
@@ -197,7 +196,7 @@ else:
     page = st.number_input("Page", min_value=1, max_value=total_pages, value=1, step=1)
     offset = (page - 1) * page_size
 
-    rows = list_mistakes(conn, where, params, limit=page_size, offset=offset)
+    rows = list_mistakes(conn, limit=page_size, offset=offset, **filter_kwargs)
 
     if total == 0:
         st.info("No results – try different filters.")
@@ -227,7 +226,7 @@ else:
                 st.write("**Reason:**", r["reason"] or "—")
 
                 if st.button(f"Load full detail", key=f"detail-{r['id']}"):
-                    detail = get_mistake(conn, int(r["id"]))
+                    detail = get_mistake(conn, r["id"])
                     if detail:
                         st.divider()
                         for letter in "ABCDEF":
