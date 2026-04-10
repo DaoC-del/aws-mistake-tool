@@ -113,12 +113,21 @@ Your answers: A B
 The EXE is built automatically on every push to `main` (and can also be
 triggered manually via **Actions → Build Windows EXE → Run workflow**).
 
-**To download:**
-1. Go to [Actions → Build Windows EXE](../../actions/workflows/build-windows.yml).
-2. Click the latest successful run (green ✓).
-3. Scroll to the **Artifacts** section at the bottom.
-4. Click **aws-mistake-tool-windows** to download the ZIP, then unzip to get `aws-mistake-tool.exe`.
+### How to download the EXE
 
-Double-click the EXE – it starts Streamlit and opens your browser
-automatically.  
-The `mistakes.db` file is created in the same folder as the EXE.
+1. Open [Actions → Build Windows EXE](https://github.com/DaoC-del/aws-mistake-tool/actions/workflows/build-windows.yml).
+2. Click the latest successful run that shows a green ✓ checkmark.
+3. Scroll down to the **Artifacts** section at the bottom of the run page.
+4. Click **aws-mistake-tool-windows** to download a ZIP file.
+5. Unzip the file to get `aws-mistake-tool.exe`.
+
+### How to run
+
+1. Place `aws-mistake-tool.exe` in any folder of your choice.
+2. Double-click `aws-mistake-tool.exe`.
+3. A browser window opens automatically at **http://localhost:8501**.
+
+> **Note:** The `mistakes.db` database file is created in the same folder as the EXE.  
+> Keep the EXE and `mistakes.db` in the same folder so your data is preserved between sessions.
+
+> **Firewall / antivirus:** Windows may show a SmartScreen warning the first time you run the EXE because it is unsigned. Click **More info → Run anyway** to proceed.
