@@ -110,15 +110,37 @@ Your answers: A B
 
 [![Build Windows EXE](https://github.com/DaoC-del/aws-mistake-tool/actions/workflows/build-windows.yml/badge.svg?branch=main)](https://github.com/DaoC-del/aws-mistake-tool/actions/workflows/build-windows.yml)
 
-The EXE is built automatically on every push to `main` (and can also be
-triggered manually via **Actions → Build Windows EXE → Run workflow**).
+### What triggers the build?
 
-**To download:**
+The **Build Windows EXE** workflow runs automatically every time code is
+pushed (or a PR is merged) to `main`.  This means **you always get a
+fresh, downloadable EXE right after any merge** – no manual step needed.
+
+You can also trigger it on demand:
+**Actions → Build Windows EXE → Run workflow → Run workflow** (select `main`).
+
+### How to download the EXE
+
 1. Go to [Actions → Build Windows EXE](../../actions/workflows/build-windows.yml).
 2. Click the latest successful run (green ✓).
-3. Scroll to the **Artifacts** section at the bottom.
-4. Click **aws-mistake-tool-windows** to download the ZIP, then unzip to get `aws-mistake-tool.exe`.
+3. Scroll to the **Artifacts** section at the bottom of the run page.
+4. Click **aws-mistake-tool-windows** to download the ZIP.
+5. Unzip to get `aws-mistake-tool.exe`.
 
 Double-click the EXE – it starts Streamlit and opens your browser
 automatically.  
 The `mistakes.db` file is created in the same folder as the EXE.
+
+---
+
+## GitHub Actions workflows explained
+
+| Workflow | File | Trigger | Purpose |
+|---|---|---|---|
+| **Build Windows EXE** | `build-windows.yml` | Push / merge to `main`, or manual | **Builds the app into a Windows `.exe`** using PyInstaller and uploads it as a downloadable Artifact. This is the workflow that produces the exe you download. |
+
+> **Is "Build Windows EXE" just a CI check?**  
+> No – it is a **build-and-package** workflow. When it finishes (green ✓),
+> a ready-to-run `aws-mistake-tool.exe` is available in the **Artifacts**
+> section of that run. CI/check workflows only validate code; this one
+> actually produces something you download and use.
