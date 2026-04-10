@@ -47,3 +47,17 @@ jobs:
           name: aws-mistake-tool-windows
           path: dist/aws-mistake-tool.exe
           if-no-files-found: error
+
+      - name: Print download instructions
+        shell: bash
+        run: |
+          echo "## ✅ Windows EXE build complete" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "The EXE has been uploaded as an artifact." >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "**To download:**" >> "$GITHUB_STEP_SUMMARY"
+          echo "1. Scroll to the **Artifacts** section at the bottom of this page." >> "$GITHUB_STEP_SUMMARY"
+          echo "2. Click **aws-mistake-tool-windows** to download the ZIP." >> "$GITHUB_STEP_SUMMARY"
+          echo "3. Unzip to get \`aws-mistake-tool.exe\`." >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "> This workflow produces a real, runnable Windows executable – not just a CI check." >> "$GITHUB_STEP_SUMMARY"
