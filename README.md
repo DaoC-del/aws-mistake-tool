@@ -108,8 +108,17 @@ Your answers: A B
 
 ## Windows EXE
 
-Download the latest `aws-mistake-tool.exe` from the
-[Actions → build-windows](../../actions/workflows/build-windows.yml) workflow
-artifacts.  Double-click it – it starts Streamlit and opens your browser
+[![Build Windows EXE](https://github.com/DaoC-del/aws-mistake-tool/actions/workflows/build-windows.yml/badge.svg?branch=main)](https://github.com/DaoC-del/aws-mistake-tool/actions/workflows/build-windows.yml)
+
+The EXE is built automatically on every push to `main` (and can also be
+triggered manually via **Actions → Build Windows EXE → Run workflow**).
+
+**To download:**
+1. Go to [Actions → Build Windows EXE](../../actions/workflows/build-windows.yml).
+2. Click the latest successful run (green ✓).
+3. Scroll to the **Artifacts** section at the bottom.
+4. Click **aws-mistake-tool-windows** to download the ZIP, then unzip to get `aws-mistake-tool.exe`.
+
+Double-click the EXE – it starts Streamlit and opens your browser
 automatically.  
 The `mistakes.db` file is created in the same folder as the EXE.
